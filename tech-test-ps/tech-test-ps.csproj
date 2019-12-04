@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>tech_test_ps</RootNamespace>
+    <AssemblyVersion>1.0.0.53</AssemblyVersion>
+    <FileVersion>1.0.0.53</FileVersion>
+  </PropertyGroup>
+
+</Project>
