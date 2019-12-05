@@ -2,51 +2,72 @@
 
 namespace tech_test_ps
 {
-    public class IrelandPayroll: IPayRollCountryState
+    public class IrelandPayroll: IPayRollCountry
     {
-        public void ComputeTaxes()
+        private AppContext Appcontext { get; set; }
+        private decimal Incoming { get; set; }
+        public IrelandPayroll(AppContext appcontext)
         {
-            Console.WriteLine("ok");
+            Appcontext = appcontext;
+        }
+
+        public Deductions ComputeTaxes()
+        {
+            var input = Appcontext.UserInput;
+            Incoming = input.HoursRate * input.HoursWorked;
+
+            var d  = new Deductions()
+            {
+                Employeelocation = input.EmployeesLocation,
+                GrossAmount = Incoming,
+                IncomeTax = CalculateincomeTaxRate(),
+                UniversalSocialCharge = CalculeteUniversalSocialCharge(),
+                Pension = CompulsoryPension(),
+                NetAmount = 0 
+              };
+
+            d.NetAmount = d.GrossAmount - d.IncomeTax - d.UniversalSocialCharge - d.Pension;
+
+            return d;
         }
 
         /// <summary>
         ///income tax at a rate of 25 % for the first €600 and 40 % thereafter
         /// </summary>
-        /// <param name="incoming"></param>
         /// <returns></returns>
-        public decimal CalculateincomeTaxRate(decimal incoming)
+        private decimal CalculateincomeTaxRate()
         {
-            var IncomeTax = (incoming * 0.25m);
-            if (incoming > 600)
-            {
-                IncomeTax = ((incoming - IncomeTax) * 0.40m) + IncomeTax;
-            }
+            if (Incoming <= 600)
+                return (Incoming * 0.25m);
+
+            var IncomeTax = (600 * 0.25m);
+            IncomeTax = ((Incoming - 600) * 0.40m) + IncomeTax;
+
             return IncomeTax;
         }
         /// <summary>
         ///Given the employee is located in Ireland, a Universal social charge of 7 % is applied for the first €500 euro and 8 % thereafter
         /// </summary>
-        /// <param name="incoming"></param>
         /// <returns></returns>
-        public decimal CalculeteUniversalSocialCharge(decimal incoming)
+        private decimal CalculeteUniversalSocialCharge()
         {
-            var IncomeTax = (incoming * 0.07m);
-            if (incoming > 500)
+            var IncomeTax = (Incoming * 0.07m);
+            if (Incoming > 500)
             {
-                IncomeTax = ((incoming - IncomeTax) * 0.08m) + IncomeTax;
+                IncomeTax = ((Incoming - IncomeTax) * 0.08m) + IncomeTax;
             }
             return IncomeTax;
         }
         /// <summary>
         ///Given the employee is located in Ireland, a compulsory pension contribution of 4 % is applied
         /// </summary>
-        /// <param name="incoming"></param>
         /// <returns></returns>
-        public decimal CompulsoryPension(decimal incoming)
+        public decimal CompulsoryPension()
         {
-            return (incoming * 0.04m);
+            return (Incoming * 0.04m);
         }
 
+     
     }
 
 }

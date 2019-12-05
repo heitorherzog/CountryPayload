@@ -2,9 +2,11 @@
 {
     public class UserInput
     {
-        public string HoursWorked { get; set; }
-        public string HoursRate { get; set; }
+        public string StrHoursWorked { get; set; }
+        public string StrHoursRate { get; set; }
         public string EmployeesLocation { get; set; }
+        public int HoursWorked { get; set; }
+        public int HoursRate { get; set; }
     }
 
 }

@@ -1,21 +1,41 @@
-﻿namespace tech_test_ps
+﻿using System.Collections.Generic;
+
+namespace tech_test_ps
 {
-    public abstract class PayRollState
+    public abstract class CountryPayRollHandler
     {
-        protected AppContext _context;
-        protected IPayRollCountryState CountryState { get; set; }
-        protected PayRollState _sucessor;
+        protected AppContext Context { get; set; }
+        private List<CountryPayRollHandler> Chain { get; set; }
+        protected CountryPayRollHandler Sucessor { get; set; }
+        private static int Index { get; set; }
 
-        protected PayRollState(AppContext appcontext)
+        protected CountryPayRollHandler(AppContext appcontext)
         {
-            _context = appcontext;
+            Context = appcontext;
         }
-        public void SetSuccessor(PayRollState handler)
+        public static CountryPayRollHandler SetUpChain(List<CountryPayRollHandler> list)
         {
-            _sucessor = handler;
-        }
+            int last = list.Count - 1;
+            for (int i = 0; i < list.Count - 1; i++)
+            {
+                list[i].Sucessor = list[+i];
+            }
 
-        public abstract void SetValidCountryPayRoll();
+            list[0].Chain = list;
+            Index = 1;
+            return list[0];
+        }
+        public CountryPayRollHandler Next(bool loop = true)
+        {
+            var handler = Chain[Index];
+            ++Index;
+
+            if (loop)
+                Index %= Chain.Count;
+
+            return handler;
+        }
+        public abstract IPayRollCountry SetCountryPayRoll();
     }
 
 }

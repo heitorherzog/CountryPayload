@@ -8,9 +8,12 @@ namespace tech_test_ps
         {
             string location = context.UserInput.EmployeesLocation;
 
-            bool isvalidLocation = Enum.IsDefined(typeof(Country), location.ToLower());
-            int.TryParse(context.UserInput.HoursRate, out int hoursRate);
-            int.TryParse(context.UserInput.HoursRate, out int hoursWorked);
+            bool isvalidLocation = Enum.IsDefined(typeof(Countries), location.ToLower());
+            int.TryParse(context.UserInput.StrHoursRate, out int hoursRate);
+            int.TryParse(context.UserInput.StrHoursWorked, out int hoursWorked);
+
+            context.UserInput.HoursRate = hoursRate;
+            context.UserInput.HoursWorked = hoursWorked;
 
             isValid = (hoursRate != 0 && hoursWorked != 0 && isvalidLocation);
         }

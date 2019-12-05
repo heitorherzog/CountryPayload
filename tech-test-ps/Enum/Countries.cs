@@ -1,6 +1,6 @@
 ﻿namespace tech_test_ps
 {
-  public  enum Country
+  public  enum Countries
     {
         ireland,
         italy,

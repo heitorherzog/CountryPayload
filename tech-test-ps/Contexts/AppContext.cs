@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
+using tech_test_ps.Payrolls;
 
 namespace tech_test_ps
 {
     public class AppContext
     {
-        Deductions Deductions { get; }
         public UserInput UserInput { get; }
-        public Display Display { get; }
+        public IDisplay Display { get; }
         public FlowHandler FlowHandler { get; }
-        public PayRollState PayRollState { get; }
+        public CountryPayRollHandler PayRollState { get; }
 
-        public AppContext()
+        public AppContext(IDisplay display)
         {
             UserInput = new UserInput();
+            Display = display;
+
             FlowHandler = FlowHandler
             .SetUpChain(new List<FlowHandler>()
             {
@@ -20,8 +22,13 @@ namespace tech_test_ps
                 new ErrorHandler(this)
             });
 
-            Display = new Display(new ConsoleWrapper());
-            PayRollState = new IrelandPayrollState(this);
+          
+            PayRollState = CountryPayRollHandler
+            .SetUpChain(new List<CountryPayRollHandler>()
+            {
+                new IrelandPayrollHandler(this),
+                new GermanyPayrollHandler(this)
+            });
         }
 
         public void Initialize()

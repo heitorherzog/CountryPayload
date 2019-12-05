@@ -2,10 +2,10 @@
 
 namespace tech_test_ps
 {
-    public class Display 
+    public class Display: IDisplay
     {
-        private ConsoleWrapper Console { get; set; }
-        public Display(ConsoleWrapper console)
+        private IConsoleWrapper Console { get;}
+        public Display(IConsoleWrapper console)
         {
             Console = console;
         }
