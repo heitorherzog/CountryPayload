@@ -51,11 +51,11 @@ namespace tech_test_ps
         /// <returns></returns>
         private decimal CalculeteUniversalSocialCharge()
         {
-            var IncomeTax = (Incoming * 0.07m);
-            if (Incoming > 500)
-            {
-                IncomeTax = ((Incoming - IncomeTax) * 0.08m) + IncomeTax;
-            }
+            if (Incoming <= 500)
+                return (Incoming * 0.07m);
+
+            var IncomeTax = (500 * 0.07m);
+            IncomeTax = ((Incoming - 500) * 0.08m) + IncomeTax;
             return IncomeTax;
         }
         /// <summary>
